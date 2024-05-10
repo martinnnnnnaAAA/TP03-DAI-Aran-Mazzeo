@@ -1,12 +1,12 @@
-import alumno from "./src/models/alumno.js"
-import { sumar, restar, multiplicar, dividir } from "./src/modules/matematica.js"
+import alumno from "./models/alumno.js"
+import { sumar, restar, multiplicar, dividir } from "./modules/matematica.js"
 import { OMDBSearchByPage, OMDBSearchComplete, OMDBGetByImdbID } from
-    "./src/modules/omdb-wrapper.js"
+    "./modules/omdb-wrapper.js"
 import express from "express"; // hacer npm i express
 import cors from "cors"; // hacer npm i cors
 import res from "express/lib/response.js";
-import ValidacionesHelper from './src/modules/ValidacionesHelper.js'
-import dateTimeHelper from "./src/modules/dateTimeHelper.js";
+import ValidacionesHelper from './modules/ValidacionesHelper.js'
+import dateTimeHelper from "./modules/dateTimeHelper.js";
 
 
 const app = express();
@@ -128,17 +128,17 @@ app.post('/alumnos', (req, res) => {
 
 
 app.delete('/alumnos', (req, res) => {
-    let alumnoAborrarIndex = alumnosArray.findIndex(p => p.DNI == req.query.DNI);
-    if (alumnoAborrarIndex === -1) {
+
+    let alumnoAborrar = alumnosArray.find(p => p.DNI == req.query.DNI)
+    if (alumnoAborrar == null) {
         res.status(404).send("Not Found");
     } else {
-        let alumnoAborrar = alumnosArray[alumnoAborrarIndex];
-        alumnosArray.splice(alumnoAborrarIndex, 1);
-        res.send(`El alumno ${alumnoAborrar.username} con DNI ${alumnoAborrar.DNI} se eliminó con éxito.`);
+        res.send(`El alumno ${alumnoAborrar.username} con DNI ${alumnoAborrar.DNI} se elimino con exito `);
+        alumnosArray.splice(alumnoAborrar)
         res.status(200).send("OK");
     }
-});
 
+})
 
 app.get('/omdb/searchbypage', async (req, res) => {
     let search = ValidacionesHelper.getStringOrDefault(req.query.search, '');
